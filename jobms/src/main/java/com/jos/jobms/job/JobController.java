@@ -21,6 +21,11 @@ public class JobController {
         return ResponseEntity.ok(jobService.findAll());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<JobDTO>> searchJobs(@RequestParam("query") String query) {
+        return ResponseEntity.ok(jobService.searchJobs(query));
+    }
+
     @PostMapping
     public ResponseEntity<String> createJob(@RequestBody Job job) {
         jobService.createJob(job);
@@ -51,5 +56,13 @@ public class JobController {
             return new ResponseEntity<>("Job updated successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<JobDTO>> filterJobs(
+            @RequestParam(required = false) String minSalary,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String title) {
+        return ResponseEntity.ok(jobService.filterJobs(minSalary, location, title));
     }
 }

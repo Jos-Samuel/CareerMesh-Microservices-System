@@ -59,4 +59,15 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return false;
     }
+
+    @Override
+    public List<Review> getReviewsByCompanyIds(List<Long> companyIds) {
+        return reviewRepository.findByCompanyIdIn(companyIds);
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void deleteByCompanyId(Long companyId) {
+        reviewRepository.deleteByCompanyId(companyId);
+    }
 }

@@ -1,35 +1,29 @@
-# DEPLOYMENT
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: company
+  name: gateway
   labels:
-    app: company
+    app: gateway
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
   template:
     metadata:
-      name: company
       labels:
-        app: company
+        app: gateway
     spec:
       containers:
-      - name: company
-        image: docker.io/josamuel7/companyms:latest
+      - name: gateway
+        image: docker.io/josamuel7/gateway-ms:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 8081
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "1000m"
+        - containerPort: 8084
         readinessProbe:
           httpGet:
             path: /actuator/health
-            port: 8081
+            port: 8084
           initialDelaySeconds: 30
           periodSeconds: 10
         env:
@@ -37,7 +31,18 @@ spec:
           value: k8s
         - name: SPRING_DATA_REDIS_HOST
           value: redis
+        - name: JAVA_TOOL_OPTIONS
+          value: "-Djava.security.egd=file:/dev/./urandom"
       restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+spec:
   selector:
-    matchLabels:
-      app: company
+    app: gateway
+  ports:
+  - port: 8084
+    targetPort: 8084
+  type: LoadBalancer

@@ -14,10 +14,23 @@ spec:
     spec:
       containers:
       - name: review
-        image: josamuel7/reviewms:latest
+        image: docker.io/josamuel7/reviewms:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8083
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8083
+          initialDelaySeconds: 30
+          periodSeconds: 10
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: k8s

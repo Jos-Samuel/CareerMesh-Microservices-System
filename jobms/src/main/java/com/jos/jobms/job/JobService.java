@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface JobService {
     List<JobDTO>  findAll();
+    List<JobDTO> searchJobs(String query);
     void createJob(Job job);
 
     JobDTO getJobById(Long id);
@@ -13,4 +14,6 @@ public interface JobService {
     boolean deleteJobById(Long id);
 
     boolean updateJob(Long id, Job updatedJob);
+    List<JobDTO> filterJobs(String minSalary, String location, String title);
+    void deleteByCompanyId(Long companyId);
 }

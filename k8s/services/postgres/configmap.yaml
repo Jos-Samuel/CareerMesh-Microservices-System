@@ -6,3 +6,7 @@ data:
   POSTGRES_DB: jos
   POSTGRES_USER: jos
   POSTGRES_PASSWORD: MJbyju@33201
+  init.sql: |
+    CREATE DATABASE company;
+    CREATE DATABASE job;
+    CREATE DATABASE review;

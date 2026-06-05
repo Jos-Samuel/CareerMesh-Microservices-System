@@ -54,4 +54,9 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/batch")
+    public ResponseEntity<List<Company>> getCompaniesByIds(@RequestBody List<Long> ids) {
+        return ResponseEntity.ok(companyService.getCompaniesByIds(ids));
+    }
 }

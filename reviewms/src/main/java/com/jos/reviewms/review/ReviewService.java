@@ -10,4 +10,6 @@ public interface ReviewService {
     boolean updateReview(Long reviewId, Review updatedReview);
 
     boolean deleteReview(Long reviewId);
+    List<Review> getReviewsByCompanyIds(List<Long> companyIds);
+    void deleteByCompanyId(Long companyId);
 }

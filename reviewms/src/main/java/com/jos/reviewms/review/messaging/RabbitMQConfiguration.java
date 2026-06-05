@@ -14,6 +14,10 @@ public class RabbitMQConfiguration {
         return new Queue("companyRatingQueue");
     }
     @Bean
+    public Queue companyDeletedQueue() {
+        return new Queue("companyDeletedQueue");
+    }
+    @Bean
     public MessageConverter jsonMessageConverter() {
         return new org.springframework.amqp.support.converter.Jackson2JsonMessageConverter();
     }

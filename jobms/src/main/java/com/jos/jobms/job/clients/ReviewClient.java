@@ -12,4 +12,7 @@ import java.util.List;
 public interface ReviewClient {
     @GetMapping("/reviews")
     List<Review> getReviews(@RequestParam("companyId") Long jobId);
+
+    @org.springframework.web.bind.annotation.PostMapping("/reviews/batch")
+    List<Review> getReviewsByCompanyIds(@org.springframework.web.bind.annotation.RequestBody List<Long> companyIds);
 }

@@ -3,7 +3,10 @@ package com.jos.jobms.job;
 import jakarta.persistence.*;
 
 @Entity
-//@Table(name = "job_table")
+@Table(indexes = {
+        @Index(name = "idx_job_title", columnList = "title"),
+        @Index(name = "idx_job_location", columnList = "location")
+})
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,8 @@
-package com.jos.jobms.job.external;
+package com.jos.jobms.job.dto;
 
-public class Review {
+public class CompanyMessage {
     private Long id;
-    private String title;
+    private String name;
     private String description;
     private double rating;
 
@@ -14,12 +14,12 @@ public class Review {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -36,15 +36,5 @@ public class Review {
 
     public void setRating(double rating) {
         this.rating = rating;
-    }
-
-    private Long companyId;
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 }

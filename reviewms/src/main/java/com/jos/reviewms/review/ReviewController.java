@@ -64,4 +64,9 @@ public class ReviewController {
         List<Review> reviewList = reviewService.getAllReviews(companyId);
         return reviewList.stream().mapToDouble(Review::getRating).average().orElse(0.0);
     }
+
+    @PostMapping("/batch")
+    public ResponseEntity<List<Review>> getReviewsByCompanyIds(@RequestBody List<Long> companyIds) {
+        return ResponseEntity.ok(reviewService.getReviewsByCompanyIds(companyIds));
+    }
 }

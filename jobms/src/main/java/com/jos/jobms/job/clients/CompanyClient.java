@@ -10,4 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CompanyClient {
     @GetMapping("/companies/{id}")
     Company getCompany(@PathVariable Long id);
+
+    @org.springframework.web.bind.annotation.PostMapping("/companies/batch")
+    java.util.List<Company> getCompaniesByIds(@org.springframework.web.bind.annotation.RequestBody java.util.List<Long> ids);
 }
