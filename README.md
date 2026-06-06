@@ -115,7 +115,7 @@ A production-grade, cloud-native job portal backend built with a microservices a
 **Responsibility:** Manages job postings and provides an aggregated view by combining data from Company and Review microservices.
 
 **Spring Boot App:** `JobmsApplication.java`  
-**Eureka Service Name:** `JOB-SERVICE-DEV`  
+**Eureka Service Name:** `JOB-SERVICE`  
 **Database:** PostgreSQL (`job` database)
 
 **Key Features:**
@@ -475,6 +475,11 @@ Start PostgreSQL, RabbitMQ, Redis, and Zipkin using Docker:
 
 ```bash
 cd companyms
+
+# Ensure no conflicting containers are running from previous tests
+docker compose down
+
+# Start only the required infrastructure
 docker compose -f docker-compose.yaml up -d postgres rabbitmq redis zipkin
 ```
 
@@ -488,9 +493,9 @@ docker ps
 Connect to Postgres and create the three databases:
 
 ```bash
-docker exec -it postgres psql -U jos -c "CREATE DATABASE company;"
-docker exec -it postgres psql -U jos -c "CREATE DATABASE job;"
-docker exec -it postgres psql -U jos -c "CREATE DATABASE review;"
+docker exec -it postgres psql -U jos -d postgres -c "CREATE DATABASE company;"
+docker exec -it postgres psql -U jos -d postgres -c "CREATE DATABASE job;"
+docker exec -it postgres psql -U jos -d postgres -c "CREATE DATABASE review;"
 ```
 
 > **Note:** The PostgreSQL username is `jos` and password is `MJbyju@33201` (as configured in `companyms/docker-compose.yaml`).
@@ -500,6 +505,8 @@ docker exec -it postgres psql -U jos -c "CREATE DATABASE review;"
 The microservices register themselves with Eureka for service discovery. Open a new terminal for each service.
 
 ```bash
+# Navigate back to the project root if you are still in companyms
+cd ..
 cd service-reg
 ./mvnw spring-boot:run
 ```
@@ -512,18 +519,21 @@ Open a **new terminal for each** of the following. Each service uses the `defaul
 
 **Company MS:**
 ```bash
+# From the project root:
 cd companyms
 ./mvnw spring-boot:run
 ```
 
 **Job MS:**
 ```bash
+# From the project root:
 cd jobms
 ./mvnw spring-boot:run
 ```
 
 **Review MS:**
 ```bash
+# From the project root:
 cd reviewms
 ./mvnw spring-boot:run
 ```
@@ -531,6 +541,7 @@ cd reviewms
 #### Step 5: Start the API Gateway
 
 ```bash
+# From the project root:
 cd gateway
 ./mvnw spring-boot:run
 ```
@@ -539,7 +550,7 @@ cd gateway
 
 All services should register with Eureka. Open `http://localhost:8761` to confirm you see:
 - `COMPANY-SERVICE`
-- `JOB-SERVICE-DEV`
+- `JOB-SERVICE`
 - `REVIEW-SERVICE`
 - `gateway`
 
@@ -612,9 +623,9 @@ This starts: `postgres`, `rabbitmq`, `zipkin`, `redis`, `servicereg` (Eureka), `
 
 The first time you start, create the databases inside Postgres:
 ```bash
-docker exec -it postgres psql -U jos -c "CREATE DATABASE company;"
-docker exec -it postgres psql -U jos -c "CREATE DATABASE job;"
-docker exec -it postgres psql -U jos -c "CREATE DATABASE review;"
+docker exec -it postgres psql -U jos -d postgres -c "CREATE DATABASE company;"
+docker exec -it postgres psql -U jos -d postgres -c "CREATE DATABASE job;"
+docker exec -it postgres psql -U jos -d postgres -c "CREATE DATABASE review;"
 ```
 
 Restart the microservices after creating the databases:
