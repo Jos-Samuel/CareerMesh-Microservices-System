@@ -34,6 +34,8 @@ spec:
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: k8s
+        - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+          value: update
       restartPolicy: Always
   selector:
     matchLabels:

@@ -37,6 +37,16 @@ spec:
           value: k8s
         - name: SPRING_DATA_REDIS_HOST
           value: redis
+        - name: SPRING_RABBITMQ_HOST
+          value: rabbitmq
+        - name: SPRING_RABBITMQ_PORT
+          value: "5672"
+        - name: SPRING_RABBITMQ_USERNAME
+          value: guest
+        - name: SPRING_RABBITMQ_PASSWORD
+          value: guest
+        - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+          value: update
       restartPolicy: Always
   selector:
     matchLabels:

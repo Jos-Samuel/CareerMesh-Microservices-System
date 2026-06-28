@@ -37,6 +37,8 @@ spec:
           value: k8s
         - name: SPRING_DATA_REDIS_HOST
           value: redis
+        - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+          value: update
       restartPolicy: Always
   selector:
     matchLabels:
