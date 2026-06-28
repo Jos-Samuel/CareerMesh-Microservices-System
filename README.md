@@ -546,32 +546,29 @@ cd gateway
 ./mvnw spring-boot:run
 ```
 
-#### Step 6: Verify
+#### Step 6: Verify using Postman
 
-All services should register with Eureka. Open `http://localhost:8761` to confirm you see:
-- `COMPANY-SERVICE`
-- `JOB-SERVICE`
-- `REVIEW-SERVICE`
-- `gateway`
+All services should register with Eureka. Open `http://localhost:8761` to confirm you see `COMPANY-SERVICE`, `JOB-SERVICE`, `REVIEW-SERVICE`, and `gateway`.
 
-Test via the Gateway:
-```bash
-# Get all companies
-curl http://localhost:8084/companies
+**Using Postman to test via the Gateway (`http://localhost:8084`):**
 
-# Create a company
-curl -X POST http://localhost:8084/companies \
-  -H "Content-Type: application/json" \
-  -d '{"name":"TechCorp","description":"A great tech company"}'
+1. **Get All Companies**
+   - Method: `GET`
+   - URL: `http://localhost:8084/companies`
+2. **Create a Company**
+   - Method: `POST`
+   - URL: `http://localhost:8084/companies`
+   - Body (Raw -> JSON): `{"name":"TechCorp","description":"A great tech company"}`
+3. **Create a Job**
+   - Method: `POST`
+   - URL: `http://localhost:8084/jobs`
+   - Body (Raw -> JSON): `{"title":"Backend Engineer","description":"Spring Boot dev","minSalary":"80000","maxSalary":"120000","location":"Bangalore","companyId":1}`
+4. **Get All Jobs (with company + reviews embedded)**
+   - Method: `GET`
+   - URL: `http://localhost:8084/jobs`
 
-# Create a job
-curl -X POST http://localhost:8084/jobs \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Backend Engineer","description":"Spring Boot dev","minSalary":"80000","maxSalary":"120000","location":"Bangalore","companyId":1}'
+*(Alternatively, you can use the standard `curl` commands from your terminal).*
 
-# Get all jobs (with company + reviews embedded)
-curl http://localhost:8084/jobs
-```
 
 ---
 
@@ -579,15 +576,28 @@ curl http://localhost:8084/jobs
 
 This method builds all images using the project's `Dockerfile`s and runs the entire system in Docker. No local Java installation needed for running (only for building).
 
+> **Prerequisite:** Docker Desktop must be running.
+
 #### Step 1: Build All JAR Files
 
 From the project root, build each microservice:
 
 ```bash
-cd companyms && ./mvnw clean package -DskipTests && cd ..
-cd jobms && ./mvnw clean package -DskipTests && cd ..
-cd reviewms && ./mvnw clean package -DskipTests && cd ..
-cd gateway && ./mvnw clean package -DskipTests && cd ..
+cd companyms
+./mvnw clean package -DskipTests
+cd ..
+
+cd jobms
+./mvnw clean package -DskipTests
+cd ..
+
+cd reviewms
+./mvnw clean package -DskipTests
+cd ..
+
+cd gateway
+./mvnw clean package -DskipTests
+cd ..
 ```
 
 #### Step 2: Build Docker Images
@@ -633,23 +643,20 @@ Restart the microservices after creating the databases:
 docker compose restart companyms jobms reviewms
 ```
 
-#### Step 5: Verify
+#### Step 5: Verify using Postman
 
-Wait about 60 seconds for Spring Boot to finish starting up, then test:
+Wait about 60 seconds for Spring Boot to finish starting up, then test. 
 
-```bash
-# Test via Gateway
-curl http://localhost:8084/companies
+**Using Postman:**
+1. Open Postman and create a new request.
+2. Set the method to **GET** and the URL to `http://localhost:8084/companies`.
+3. Click **Send**. You should receive a `200 OK` response with an empty array `[]` (since the database is freshly created).
 
-# Check Eureka
-# Open http://localhost:8761 in your browser
+**Additional Dashboards to Verify:**
+- **Eureka:** Open `http://localhost:8761` in your browser.
+- **RabbitMQ:** Open `http://localhost:15672` (guest/guest).
+- **Zipkin:** Open `http://localhost:9411`.
 
-# Check RabbitMQ Management Console
-# Open http://localhost:15672 (guest/guest)
-
-# Check Zipkin Tracing
-# Open http://localhost:9411
-```
 
 #### Useful Docker Compose Commands
 
@@ -771,22 +778,15 @@ Open a dedicated terminal and run the following (keep it running):
 kubectl port-forward svc/gateway 8084:8084
 ```
 
-#### Step 7: Verify
+#### Step 7: Verify using Postman
 
-Open a **new terminal** and test:
+Because you forwarded the port, you can interact with the Kubernetes cluster exactly the same way you tested locally!
 
-```bash
-# Windows (PowerShell)
-curl.exe -s http://localhost:8084/companies
-
-# macOS/Linux
-curl -s http://localhost:8084/companies
-
-# Create a company
-curl.exe -X POST http://localhost:8084/companies \
-  -H "Content-Type: application/json" \
-  -d "{\"name\":\"TechCorp\",\"description\":\"A great tech company\"}"
-```
+**Using Postman:**
+1. Open Postman.
+2. Ensure your terminal running the `port-forward` command is still active.
+3. To view companies: Send a **GET** request to `http://localhost:8084/companies`.
+4. To create a company: Send a **POST** request to `http://localhost:8084/companies` with the Raw JSON Body: `{"name":"TechCorp","description":"A great tech company"}`.
 
 #### Useful Kubernetes Commands
 
